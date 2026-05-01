@@ -6,12 +6,17 @@ import items.*;
 import interactables.*;
 import puzzles.*;
 import java.util.Scanner;
+
 public class GameEngine {
     private Player player;
     private Room currentRoom;
     private CommandHandler commandHandler;
     private boolean gameOver;
     private boolean escaped;
+    private Door exitDoor;    // ← add this
+    private Locker locker;    // ← add this
+
+
     public GameEngine() {
         this.commandHandler = new CommandHandler();
         this.gameOver = false;
@@ -51,11 +56,11 @@ public class GameEngine {
         currentRoom.addItem(bronzeKey);
         currentRoom.addItem(noteClue);
         // Locker containing the golden key
-        Locker locker = new Locker("Metal Locker", "bronze", goldenKey);
+        locker = new Locker("Metal Locker", "bronze", goldenKey);
         currentRoom.addUnlockable(locker);
         // Exit door
-        Door exitDoor = new Door("Exit Door", "golden");
-        currentRoom.addUnlockable(exitDoor);
+        exitDoor = new Door("Exit Door", "golden");
+
         // Puzzles
         RiddlePuzzle riddle = new RiddlePuzzle(
                 "Stone Tablet",
@@ -207,6 +212,7 @@ public class GameEngine {
             }
             if (puzzle.getName().equals("Digital Keypad")) {
                 currentRoom.setDoorVisible(true);
+                currentRoom.addUnlockable(exitDoor);
                 System.out.println("A hidden door slides into view!");
             }
         }
